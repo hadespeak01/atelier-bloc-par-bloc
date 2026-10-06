@@ -1,0 +1,35 @@
+# Construit automatiquement l'installateur Windows (.exe) et l'application Mac (.dmg)
+# Onglet « Actions » du dépôt GitHub → « Construire l'application » → « Run workflow »
+name: Construire l'application
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            cmd: build:win
+            files: dist/*.exe
+          - os: macos-latest
+            cmd: build:mac
+            files: dist/*.dmg
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run ${{ matrix.cmd }}
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: atelier-${{ matrix.os }}
+          path: ${{ matrix.files }}
