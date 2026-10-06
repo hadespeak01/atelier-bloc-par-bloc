@@ -1,0 +1,54 @@
+{
+  "name": "atelier-bloc-par-bloc",
+  "productName": "Atelier bloc par bloc",
+  "version": "1.0.0",
+  "description": "Éditeur de constructions Minecraft en 3D, avec plans 2D et générateur de formes",
+  "author": "Atelier bloc par bloc",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "postinstall": "node scripts/vendor.js",
+    "start": "electron .",
+    "build:win": "electron-builder --win --publish never",
+    "build:mac": "electron-builder --mac --publish never"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "three": "0.128.0"
+  },
+  "build": {
+    "appId": "fr.atelierblocparbloc.app",
+    "productName": "Atelier bloc par bloc",
+    "copyright": "Atelier bloc par bloc",
+    "directories": { "output": "dist", "buildResources": "build" },
+    "files": ["main.js", "preload.js", "app/**/*", "build/icon.png"],
+    "fileAssociations": [
+      { "ext": "abp", "name": "Projet Atelier bloc par bloc", "description": "Projet Atelier bloc par bloc", "role": "Editor" }
+    ],
+    "win": {
+      "icon": "build/icon.png",
+      "target": [
+        { "target": "nsis", "arch": ["x64"] },
+        { "target": "portable", "arch": ["x64"] }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "Atelier bloc par bloc",
+      "artifactName": "Atelier-bloc-par-bloc-${version}-installation.exe"
+    },
+    "portable": {
+      "artifactName": "Atelier-bloc-par-bloc-${version}-portable.exe"
+    },
+    "mac": {
+      "icon": "build/icon.png",
+      "category": "public.app-category.graphics-design",
+      "target": [{ "target": "dmg", "arch": ["x64", "arm64"] }],
+      "artifactName": "Atelier-bloc-par-bloc-${version}-${arch}.${ext}"
+    }
+  }
+}
